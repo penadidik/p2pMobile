@@ -1,0 +1,23 @@
+<resources>
+    <string name="alert_user_empty">User tidak boleh kosong</string>
+    <string name="alert_password_empty">Password tidak boleh kosong</string>
+    <string name="alert_exit">Keluar</string>
+
+    <string name="qr_generate">Generate QR</string>
+    <string name="qr_edit">Ubah QR</string>
+
+    <string name="send_data">Kirim Data</string>
+    <string name="retry_connection">Ulangi Koneksi</string>
+
+    <string name="device_request_connection">Ada perangkat yang mencoba terhubung ke POS ini</string>
+    <string name="device_request_reject">Tolak</string>
+    <string name="device_request_accept">Terima</string>
+
+    <string name="error_closed_by_server">Koneksi terputus dengan POS, silahkan pastikan POS mengaktifkan fitur koneksi ke aplikasi Pawoon Order.</string>
+    <string name="error_unauthorized">Koneksi terputus dengan POS, silahkan scan ulang qr code pada POS untuk terhubung kembali.</string>
+    <string name="error_try_again">Koneksi terputus dengan POS, silahkan coba lagi</string>
+    <string name="error_action_try_again">Coba lagi</string>
+    <string name="error_action_scan_qr">Scan Qr</string>
+    <string name="error_qr_code_not_match">Qr Code tidak sesuai, silahkan cek Qr code dari aplikasi POS Anda.</string>
+
+</resources>
