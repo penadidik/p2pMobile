@@ -17,6 +17,7 @@ import info.penadidik.utils.base.BaseActivity
 import info.penadidik.utils.extension.showToast
 import info.penadidik.utils.getRandomString
 import info.penadidik.utils.hideSoftKeyboard
+import info.penadidik.utils.showLog
 import net.glxn.qrgen.android.QRCode
 
 class ServerPeerActivity: BaseActivity() {
@@ -99,81 +100,28 @@ class ServerPeerActivity: BaseActivity() {
         database.addDocumentChangeListener(
             "order"
         ) {
-            Log.d(TAG, "addDocumentChangeListener-send_data : ${it.database.getDocument("order").toString()}")
+            showLog(TAG, "addDocumentChangeListener-send_data : ${it.database.getDocument("order").toString()}")
             Toast.makeText(this, "Database change send_data, ${it.database}", Toast.LENGTH_LONG)
                 .show()
         }
         database.addDocumentChangeListener(
             "product_list"
         ) {
-            Log.d(TAG, "addDocumentChangeListener-product_list : ${it.database}")
+            showLog(TAG, "addDocumentChangeListener-product_list : ${it.database}")
             Toast.makeText(this, "Database change product_list, ${it.database}", Toast.LENGTH_LONG)
                 .show()
         }
     }
 
     private fun ibListenerGetNetworkInterfaces() {
-        Log.i(TAG, "URLS are ${serverListener?.urls}")
+        showLog(TAG, "URLS are ${serverListener?.urls}")
         val activeConnectionCount = serverListener?.status?.activeConnectionCount
-        Log.d(TAG, "activeConnectionCount count $activeConnectionCount")
-    }
-
-    fun ibListenerConfigTlsDisable() {
-        URLEndpointListenerConfigurationFactory.create(database, disableTls = false)
-    }
-
-    // !!! USERS SHOULD BE CAUTIONED THAT THIS IS INSECURE
-    // Android has much better ways of importing keys
-    fun ibListenerConfigTlsIdFull() {
-        // Use CA Cert
-        // Import a key pair into secure storage
-        // Create a TLSIdentity from the imported key-pair
-
-        this.javaClass.getResourceAsStream("serverkeypair.p12")?.use {
-            KeyStoreUtils.importEntry(
-                "teststore.p12",  // KeyStore type, eg: "PKCS12"
-                it,  // An InputStream from the keystore
-                "let me in".toCharArray(),  // The keystore password
-                "topSekritKey",  // The alias to be used (in external keystore)
-                null,  // The key password or null if the key has none
-                "test-alias" // The alias for the imported key
-            )
-        }
-
-        // Set the TLS Identity
-        URLEndpointListenerConfigurationFactory.create(
-            database, identity = TLSIdentity.getIdentity("test-alias")
-        )
-
-    }
-
-    fun ibListenerConfigClientAuthRoot() {
-        // Configure the client authenticator
-        // to validate using ROOT CA
-        // thisClientID.certs is a list containing a client cert to accept
-        // and any other certs needed to complete a chain between the client cert
-        // and a CA
-        val validId = TLSIdentity.getIdentity("Our Corporate Id")
-            ?: throw IllegalStateException("Cannot find corporate id")
-        // accept only clients signed by the corp cert
-        serverListener = URLEndpointListener(
-            URLEndpointListenerConfigurationFactory.create(
-                // get the identity
-                database = database,
-                identity = validId,
-                authenticator = ListenerCertificateAuthenticator(validId.certs)
-            )
-        )
-
-    }
-
-    fun ibListenerConfigTlsDisable2() {
-        URLEndpointListenerConfigurationFactory.create(database = database, disableTls = true)
+        showLog(TAG, "activeConnectionCount count $activeConnectionCount")
     }
 
     private fun ibListenerStatusCheck() {
         val connectionCount = serverListener?.status?.connectionCount
-        Log.d(TAG, "Connection count $connectionCount")
+        showLog(TAG, "Connection count $connectionCount")
     }
 
     private fun ibListenerStop() {

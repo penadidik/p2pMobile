@@ -51,6 +51,6 @@ fun Activity.getRandomString(length: Int) : String {
         .joinToString("")
 }
 
-fun Activity.showLog(class_name: AppCompatActivity, log: String) {
-    if (BuildConfig.DEBUG) Log.d("HelperLog from "+class_name.packageName, log)
+fun Activity.showLog(tag: String, log: String) {
+    if (BuildConfig.DEBUG) Log.d("HelperLog from $tag", log)
 }

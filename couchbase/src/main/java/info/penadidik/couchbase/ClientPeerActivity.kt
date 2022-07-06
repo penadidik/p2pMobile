@@ -4,6 +4,7 @@ import android.app.Activity
 import android.net.UrlQuerySanitizer
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import com.couchbase.lite.*
 import info.penadidik.couchbase.databinding.ActivityClientPeerBinding
 import info.penadidik.couchbase.manager.DatabaseManager
@@ -15,6 +16,7 @@ import info.penadidik.utils.base.BaseActivity
 import info.penadidik.utils.extension.DialogTwoActionListener
 import info.penadidik.utils.extension.showDialogMessage
 import info.penadidik.utils.extension.showToast
+import info.penadidik.utils.showLog
 import okhttp3.internal.Util
 
 class ClientPeerActivity: BaseActivity() {
@@ -35,6 +37,8 @@ class ClientPeerActivity: BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityClientPeerBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.btnSend.visibility = View.GONE
 
         binding.btnScanQr.setOnClickListener { intentScanQr() }
 
@@ -157,16 +161,17 @@ class ClientPeerActivity: BaseActivity() {
 
     private fun checkConnectionStatus() {
         thisReplicator.status.let {
-            Log.d(TAG, "Activity level :  ${it.activityLevel}")
-            Log.d(TAG, "Progress :  ${it.progress}")
-            binding.statusConnection.text = it.activityLevel.name
+            showLog(TAG, "Activity level :  ${it.activityLevel}")
+            showLog(TAG, "Progress :  ${it.progress}")
+            val stringStatus = if (it.activityLevel != ReplicatorActivityLevel.CONNECTING) it.activityLevel.name else "CONNECTED"
+            binding.statusConnection.text = stringStatus
             binding.btnSend.text = getString(
                 if (it.activityLevel == ReplicatorActivityLevel.CONNECTING) R.string.send_data
                 else R.string.retry_connection
             )
             status = ReplicatorActivityLevel.CONNECTING
 
-            Log.d(
+            showLog(
                 TAG,
                 if (it.activityLevel === ReplicatorActivityLevel.BUSY) {
                     "Replication Processing"
@@ -175,6 +180,8 @@ class ClientPeerActivity: BaseActivity() {
                 }
             )
         }
+
+        binding.btnSend.visibility = View.VISIBLE
     }
 
     private fun startToConnect(hostAddress: String, username: String, password: String) {
